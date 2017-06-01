@@ -49,13 +49,15 @@ class SurveyController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title'       => 'required|unique:surveys,title',
-            'question'    => 'required',
+            'title'    => 'required|unique:surveys,title',
+            'question' => 'required',
+            'page_id'  => 'required|exists:pages,id',
         ]);
 
         $survey = Survey::create([
-            'title' => $request->title,
-            'question' => $request->question
+            'title'    => $request->title,
+            'question' => $request->question,
+            'page_id'  => $request->page_id,
         ]);
 
         return redirect()->route('admin.surveys.show', ['survey' => $survey->id]);
@@ -124,7 +126,8 @@ class SurveyController extends Controller
         }
 
         $rules = [
-            'question'    => 'required',
+            'question' => 'required',
+            'page_id'  => 'required|exists:pages,id',
         ];
 
         if ($survey->title != $request->title) {
@@ -135,6 +138,7 @@ class SurveyController extends Controller
 
         $survey->title = $request->title;
         $survey->question = $request->question;
+        $survey->page_id = $request->page_id;
         $survey->save();
 
         return redirect()->route('admin.surveys.show', ['survey' => $survey->id]);

@@ -88,7 +88,7 @@ class PageController extends Controller
         $topSubpages = $page->topSubpages;
         $leftSubpages = $page->leftSubpages;
         $rightSubpages = $page->rightSubpages;
-        $survey = $page->survey;
+        $survey = $page->surveys;
         $categories = $page->categories;
 
         if (!is_null($page->superpage)) {
