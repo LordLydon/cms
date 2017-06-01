@@ -88,9 +88,9 @@ class UserController extends Controller
         });
 
         if ($response == Password::PASSWORD_RESET) {
-            redirect('/')->with('status', trans($response));
+            return redirect('/')->with('status', trans($response));
         } else {
-            redirect()->back()
+            return redirect()->back()
                 ->withInput($request->only('email'))
                 ->withErrors(['email' => trans($response)]);
         }
@@ -135,7 +135,16 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = Page::find(1);
+        $topSubpages = $page->topSubpages;
+
+        $user = User::find($id);
+
+        if (is_null($user)) {
+            abort(404);
+        }
+
+        return view('admin.users.form', compact('topSubpages', 'user'));
     }
 
     /**
@@ -148,7 +157,28 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+
+        if (is_null($user)) {
+            abort(404);
+        }
+
+        $validations = [
+            'name'  => 'required',
+
+        ];
+
+        if ($request->email != $user->email) {
+            $validations['email'] = 'required|email|unique:users,email';
+        }
+
+        $this->validate($request, $validations);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+
+        return redirect()->route('admin.users.index')->with(['session' => 'Usuario creado exitosamente. Se ha enviado un email para la asignación de contraseña', 'session-result' => 'success']);
     }
 
     /**
@@ -160,6 +190,18 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+
+        if (is_null($user)) {
+            abort(404);
+        }
+
+        if ($id == Auth::user()->id) {
+            return redirect()->back()->with(['status' => 'No te puedes eliminar a ti mismo!', 'status-result' => 'danger']);
+        }
+
+        $user->delete();
+
+        return redirect()->back()->with(['status' => 'El usuario fué eliminado correctamente!', 'status-result' => 'success']);
     }
 }
