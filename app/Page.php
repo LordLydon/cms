@@ -30,9 +30,9 @@ class Page extends Model
         //return $this->belongsToMany('App\Category');
     }
 
-    public function survey()
+    public function surveys()
     {
-        return $this->hasOne('App\Survey');
+        return $this->hasMany('App\Survey');
     }
 
     public function superpage()
