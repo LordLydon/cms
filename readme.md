@@ -19,5 +19,6 @@
 3. Configuración de variables de ambiente  
     - Copiar `.env.example` con el nombre `.env`
     - Cambiar variables de acceso de base de datos, servidor SMTP e información de la app.
-4. Crear tablas en la base de datos con el comando `php artisan migrate --seed`, que crea un usuario administrador con login `admin@admin.com` y password `admin` y una pagina inicial por defecto.  
+4. Crear tablas en la base de datos con el comando `php artisan migrate --seed`, que crea un usuario administrador con login `admin@admin.com` y password `admin` y una pagina inicial por defecto.
+5. Generar la llave de codificación de la app con el comando `php artisan key:generate` 
  **Nota:** Se recomienda ir a la administración de usuarios para cambiar el email y la contraseña del usuario!
