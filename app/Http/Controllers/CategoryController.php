@@ -30,7 +30,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $page = Page::find(1);
+        $topSubpages = $page->topSubpages;
+
+        $pages = Page::all()->pluck('name', 'id');
+
+        return view('admin.categories.form', compact('topSubpages', 'pages'));
     }
 
     /**
@@ -41,7 +46,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|unique:categories,name',
+            'description' => 'required',
+            'page_id' => 'required|exists:pages,id'
+        ]);
+
+        $cat = Category::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'page_id' => $request->page_id
+        ]);
+
+        return redirect()->route('admin.categories.show', ['category' => $cat->id]);
     }
 
     /**
@@ -52,7 +69,19 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $category = Category::with('documents')->find($id);
+
+        if ($category == null) {
+            abort(404);
+        }
+
+        $page = Page::find(1);
+        $topSubpages = $page->topSubpages;
+
+        $documents = $category->documents;
+
+        return view('admin.categories.show', compact('topSubpages', 'category', 'documents'));
+
     }
 
     /**
@@ -63,7 +92,18 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+
+        if ($category == null) {
+            abort(404);
+        }
+
+        $page = Page::find(1);
+        $topSubpages = $page->topSubpages;
+
+        $pages = Page::all()->pluck('name', 'id');
+
+        return view('admin.categories.form', compact('topSubpages', 'pages', 'category'));
     }
 
     /**
@@ -75,7 +115,29 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::find($id);
+
+        if (is_null($category)) {
+            abort(404);
+        }
+
+        $rules = [
+            'description' => 'required',
+            'page_id' => 'required|exists:pages,id'
+        ];
+
+        if ($category->name != $request->name) {
+            $rules['name'] = 'required|unique:categories,name';
+        }
+
+        $this->validate($request, $rules);
+
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->page_id = $request->page_id;
+        $category->save();
+
+        return redirect()->route('admin.categories.show', ['category' => $cat->id]);
     }
 
     /**
@@ -86,6 +148,18 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+
+        if ($category == null) {
+            abort(404);
+        }
+
+        if ($category->documents()->count() > 0) {
+            return redirect()->back()->with(['status' => 'No se pueden eliminar categorías con documentos cargados', 'status-result' => 'danger']);
+        }
+
+        $category->delete();
+
+        return redirect()->back()->with(['status' => 'Categoría eliminada exitosamente.', 'status-result' => 'success']);
     }
 }

@@ -79,7 +79,7 @@ class PageController extends Controller
         $page = Page::find($id);
 
         if (is_null($page) || (Auth::guest() && $page->is_private)) {
-            // If the page doesn't exist in the db, or the page is private & the user isn't logged in, then send 404 response
+            // If the page doesn't exist in the db or the page is private & the user isn't logged in, then send 404 response
             abort(404);
         }
 
@@ -206,6 +206,10 @@ class PageController extends Controller
 
         if ($page->id == 1) {
             return redirect()->back()->with(['status' => 'No se puede eliminar la página principal!', 'status-result' => 'danger']);
+        }
+
+        if ($page->subpages()->count() > 0) {
+            return redirect()->back()->with(['status' => 'No se puede eliminar una Página con subpáginas!', 'status-result' => 'danger']);
         }
 
         $page->delete();

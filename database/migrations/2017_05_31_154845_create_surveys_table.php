@@ -17,7 +17,7 @@ class CreateSurveysTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('page_id')->unsigned();
+            $table->integer('page_id')->unsigned()->nullable();
             $table->string('title');
             $table->string('question');
             $table->timestamps();

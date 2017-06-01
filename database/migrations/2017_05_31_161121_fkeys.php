@@ -15,7 +15,8 @@ class Fkeys extends Migration
        Schema::table('categories', function ($table) {
             $table->engine = 'InnoDB';
 
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
+            $table->foreign('page_id')->references('id')->on('pages')->onDelete('set null');
         });
 
         Schema::table('documents', function ($table) {
@@ -27,7 +28,7 @@ class Fkeys extends Migration
         Schema::table('surveys', function ($table) {
             $table->engine = 'InnoDB';
             
-            $table->foreign('page_id')->references('id')->on('pages');
+            $table->foreign('page_id')->references('id')->on('pages')->onDelete('set null');
         });
 
         Schema::table('survey_results', function ($table) {
@@ -39,21 +40,21 @@ class Fkeys extends Migration
         Schema::table('survey_options', function ($table) {
             $table->engine = 'InnoDB';
             
-            $table->foreign('survey_id')->references('id')->on('surveys');
+            $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
         });
 
         Schema::table('pages', function ($table) {
             $table->engine = 'InnoDB';
             
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('page_id')->references('id')->on('pages');
         });
 
         Schema::table('category_page', function ($table) {
             $table->engine = 'InnoDB';
             
-            $table->foreign('category_id')->references('id')->on('categories');
-            $table->foreign('page_id')->references('id')->on('pages');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
         });
     }
 

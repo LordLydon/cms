@@ -14,7 +14,7 @@ Route::get('/{id?}', 'PageController@show')->where('id', '[0-9]*')->name('pages.
 
 Route::post('/survey/{id}', 'SurveyController@submit')->where('id', '[0-9]+')->name('surveys.submit');
 
-Route::get('/document/{id}', 'DocumentController@show')->where('id', '[0-9]+')->name('documents.show');
+Route::get('/categories/{category}/documents/{id}', 'DocumentController@show')->where(['id' => '[0-9]+', 'category' => '[0-9]+'])->name('documents.show');
 
 
 // Admin Routes
@@ -22,12 +22,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], fu
     Route::resource('users', 'UserController', [
         'except' => 'show'
     ]);
-    Route::resource('pages', 'PageController');
+    Route::resource('pages', 'PageController', ['except' => 'show']);
     Route::resource('categories', 'CategoryController');
-    Route::resource('documents', 'DocumentController');
+    Route::resource('categories.documents', 'DocumentController', ['except' => 'show']);
     Route::resource('surveys', 'SurveyController');
-    Route::resource('surveys', 'SurveyController');
-
+    // SurveyOptions
+    Route::get('/surveys/{survey}/options/create', 'SurveyController@createOption')->where('survey', '[0-9]+')->name('surveys.options.create');
+    Route::post('/surveys/{survey}/options', 'SurveyController@storeOption')->where('survey', '[0-9]+')->name('surveys.options.store');
+    Route::delete('/surveys/{survey}/options/{id}', 'SurveyController@destroyOption')->where(['id' => '[0-9]+', 'survey' => '[0-9]+'])->name('surveys.options.destroy');
 });
 
 // Authentication Routes...

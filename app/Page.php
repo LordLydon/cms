@@ -26,7 +26,8 @@ class Page extends Model
 
     public function categories()
     {
-        return $this->belongsToMany('App\Category');
+        return $this->hasMany('App\Category');
+        //return $this->belongsToMany('App\Category');
     }
 
     public function survey()
@@ -68,7 +69,7 @@ class Page extends Model
     {
         switch ($value) {
             case 'top' :
-                return 'Arriba';
+                return 'Superior';
                 break;
             case 'left':
                 return 'Izquierda';

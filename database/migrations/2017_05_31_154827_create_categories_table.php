@@ -18,6 +18,7 @@ class CreateCategoriesTable extends Migration
 
             $table->increments('id');
             $table->integer('category_id')->unsigned()->nullable()->comment('Supercategory id');
+            $table->integer('page_id')->unsigned()->nullable();
             $table->string('name');
             $table->string('description');
             $table->timestamps();
