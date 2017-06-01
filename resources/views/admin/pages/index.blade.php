@@ -44,7 +44,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="6">No hay usuarios</td>
+                <td colspan="6">No hay páginas</td>
             </tr>
         @endforelse
         </tbody>
