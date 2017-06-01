@@ -50,13 +50,11 @@ class SurveyController extends Controller
     {
         $this->validate($request, [
             'title'       => 'required|unique:surveys,title',
-            'description' => 'required',
             'question'    => 'required',
         ]);
 
         $survey = Survey::create([
             'title' => $request->title,
-            'description' => $request->description,
             'question' => $request->question
         ]);
 
@@ -126,7 +124,6 @@ class SurveyController extends Controller
         }
 
         $rules = [
-            'description' => 'required',
             'question'    => 'required',
         ];
 
@@ -137,7 +134,6 @@ class SurveyController extends Controller
         $this->validate($request, $rules);
 
         $survey->title = $request->title;
-        $survey->description = $request->description;
         $survey->question = $request->question;
         $survey->save();
 

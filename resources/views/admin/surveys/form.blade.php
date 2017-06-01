@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('question') ? ' has-error' : '' }}">
-            <label for="question" class="col-md-4 control-label">Descripción</label>
+            <label for="question" class="col-md-4 control-label">Pregunta</label>
 
             <div class="col-md-6">
                 <input id="question" type="text" class="form-control" name="question"
