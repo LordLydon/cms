@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @push('styles')
-<link rel="stylesheet" type="text/css" href="{{ asset('css/select2.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('/css/select2.min.css') }}">
 @endpush
 
 
@@ -49,25 +49,12 @@
                         No mostrar
                     </option>
                 </select>
-                <input id="position" type="text" class="form-control" name="position"
-                       value="{{ old('position') ?: (isset($page) ? $page->position : '') }}" required>
 
                 @if ($errors->has('position'))
                     <span class="help-block">
                         <strong>{{ $errors->first('position') }}</strong>
                     </span>
                 @endif
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <div class="col-lg-10">
-                <div class="checkbox">
-                    <label>
-                        <input name="is_private" type="checkbox" {{ isset($page) ? ($page->is_private ? 'checked' : '') : '' }} {{ isset($page) ? ($page->id == 1 ? 'disabled' : '') : '' }}> Privado?
-                    </label>
-                </div>
             </div>
         </div>
 
@@ -85,6 +72,31 @@
         </div>
 
         <div class="form-group">
+            <div class="col-md-offset-4">
+                <div class="checkbox">
+                    <label>
+                        <input name="is_private"
+                               type="checkbox" {{ isset($page) ? ($page->is_private ? 'checked' : '') : '' }} {{ isset($page) ? ($page->id == 1 ? 'disabled' : '') : '' }}>
+                        Privado?
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group{{ $errors->has('content') ? ' has-error' : '' }}">
+            <label for="content" class="control-label">Contenido</label>
+            @if ($errors->has('content'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('content') }}</strong>
+                </span>
+            @endif
+            <hr class="mt-0">
+            <textarea name="content" id="content" required>
+                {!! isset($page) ? $page->content : '' !!}
+            </textarea>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-6 col-md-offset-4">
                 <button type="submit" class="btn btn-primary">
                     {{ isset($page) ? 'Editar' : 'Crear' }} Página
@@ -96,13 +108,14 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('/select2-4.0.3/dist/js/select2.min.js') }}"></script>
-<script src="{{ asset('/select2-4.0.3/dist/js/i18n/es.js') }}"></script>
+<script src="{{ asset('/js/select2.min.js') }}"></script>
+<script src="{{ asset('/js/i18n/es.js') }}"></script>
+<script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         var selPage = $("#page_id");
         $.fn.select2.defaults.set("language", "es");
-        selRol.select2();
+        selPage.select2();
 
         if (window.matchMedia("(max-width: 480px)").matches) {
             /* the viewport is at most 480 pixels wide */
@@ -111,6 +124,22 @@
                 $('.select2-search input').prop('focus', false);
             });
         }
+
+        tinymce.init({
+            selector: '#content',  // change this value according to your HTML
+            theme: 'modern',
+            width: '100%',
+            height: 300,
+            language: 'es',
+            plugins: [
+                'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+                'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                'save table contextmenu directionality emoticons template paste textcolor'
+            ],
+            content_css: '{{ asset('css/paper.bootstrap.min.css') }}',
+            toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons'
+        });
+
     });
 </script>
 @endpush

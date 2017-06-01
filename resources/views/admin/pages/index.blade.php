@@ -4,6 +4,11 @@
     <a href="{{ route('admin.pages.create') }}" class="btn btn-success pull-right mt-20"><i class="fa fa-plus"></i></a>
     <h3>Paginas</h3>
     <hr class="mt-0">
+    @if (session('status'))
+        <div class="alert alert-{{ session('status-result') }}">
+            {{ session('status') }}
+        </div>
+    @endif
     <table class="table table-bordered table-hover">
         <thead>
         <tr>

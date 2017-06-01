@@ -92,3 +92,7 @@
 
 
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
+@endpush
