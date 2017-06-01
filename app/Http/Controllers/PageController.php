@@ -30,7 +30,10 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        $page = Page::find(1);
+        $topSubpages = $page->topSubpages;
+
+        return view('admin.pages.create', compact('topSubpages'));
     }
 
     /**
@@ -54,7 +57,8 @@ class PageController extends Controller
     {
         $page = Page::find($id);
 
-        if(is_null($page)) {
+        if(is_null($page) || (Auth::guest() && $page->is_private)) {
+            // If the page doesn't exist in the db, or the page is private & the user isn't logged in, then send 404 response
             abort(404);
         }
 
@@ -101,7 +105,16 @@ class PageController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = Page::find(1);
+        $topSubpages = $page->topSubpages;
+
+        $page = Page::finc($id);
+
+        if (is_null($page)) {
+            abort(404);
+        }
+
+        return view('admin.pages.edit', compact('topSubpages', 'page'));
     }
 
     /**
