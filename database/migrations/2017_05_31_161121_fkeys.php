@@ -25,7 +25,6 @@ class Fkeys extends Migration
         });
 
         Schema::table('survey_results', function ($table) {
-            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('survey_id')->references('id')->on('surveys');
         });
 
