@@ -21,7 +21,7 @@ class CreateDocumentsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('storage_path');
-            $table->string('keywords');
+            $table->string('keywords')->nullable();
             $table->string('file_extension');
             $table->timestamps();
         });
