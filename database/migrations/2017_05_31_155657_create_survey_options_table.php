@@ -18,7 +18,6 @@ class CreateSurveyOptionsTable extends Migration
 
             $table->increments('id');
             $table->integer('survey_id')->unsigned();
-            $table->integer('option');
             $table->string('value');
             $table->timestamps();
         });

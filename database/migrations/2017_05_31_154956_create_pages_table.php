@@ -17,7 +17,7 @@ class CreatePagesTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->nullable();
             $table->integer('page_id')->unsigned()->nullable()->comment('Superpage id');
             $table->string('name');
             $table->boolean('is_private');
