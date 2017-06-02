@@ -20,5 +20,6 @@
     - Copiar `.env.example` con el nombre `.env`
     - Cambiar variables de acceso de base de datos, servidor SMTP e información de la app.
 4. Crear tablas en la base de datos con el comando `php artisan migrate --seed`, que crea un usuario administrador con login `admin@admin.com` y password `admin` y una pagina inicial por defecto.
-5. Generar la llave de codificación de la app con el comando `php artisan key:generate` 
+5. Generar la llave de codificación de la app con el comando `php artisan key:generate`  
  **Nota:** Se recomienda ir a la administración de usuarios para cambiar el email y la contraseña del usuario!
+6. Crear symlink a la carpeta `app/storage/public` desde `public` para permitir acceso a los documentos cargados desde la web: `php artisan storage:link`

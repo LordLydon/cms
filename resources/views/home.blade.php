@@ -75,7 +75,7 @@
                                     <ul class="list-group">
                                         @forelse($category->documents as $document)
                                             <li class="list-group-item">
-                                                <a href="{{ route('documents.show', ['document' => $document->id]) }}">{{ $document->name }}</a>
+                                                <a href="{{ route('categories.documents.show', ['category' => $category->id,'document' => $document->id]) }}">{{ $document->name }}</a>
                                             </li>
                                         @empty
                                             <li class="list-group-item">No existen documentos con esta categoría.</li>
