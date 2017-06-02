@@ -12,7 +12,7 @@ class SurveyOption extends Model
      * @var array
      */
     protected $fillable = [
-        'survey_id', 'option', 'value',
+        'survey_id', 'value',
     ];
 
     public function survey()

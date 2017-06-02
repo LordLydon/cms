@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Page;
 use App\Survey;
+use App\SurveyOption;
 use App\SurveyResult;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SurveyController extends Controller
 {
@@ -81,7 +83,7 @@ class SurveyController extends Controller
         $page = Page::find(1);
         $topSubpages = $page->topSubpages;
 
-        $options = $survey->options();
+        $options = $survey->options()->withCount('results')->get();
 
         return view('admin.surveys.show', compact('topSubpages', 'survey', 'options'));
     }
@@ -163,7 +165,7 @@ class SurveyController extends Controller
             return redirect()->back()->with(['status' => 'No puedes eliminar una encuesta con resultados', 'status-result' => 'danger']);
         }
 
-        $survey->destroy();
+        $survey->delete();
 
         return redirect()->back()->with(['status' => 'La encuesta fue eliminada correctamente', 'status-result' => 'success']);
     }
@@ -208,10 +210,37 @@ class SurveyController extends Controller
 
     public function storeOption(Request $request, $survey)
     {
+        $survey = Survey::find($survey);
 
+        if (is_null($survey)) {
+            abort(404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'value' => 'required',
+        ]);
+
+        $validator->after(function ($validator) use ($survey, $request) {
+            #TODO Trim survey options to avoid repeating options
+            if ($survey->options()->where('value', 'LIKE', '%' . $request->value . '%')->exists()) {
+                $validator->errors()->add('value', 'Ya existe el valor para esta encuesta');
+            }
+        });
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        $option = SurveyOption::create([
+            'value'     => $request->value,
+            'survey_id' => $survey->id,
+        ]);
+
+        return redirect()->back()->with(['status' => 'Opción creada correctamente!', 'status-result' => 'success']);
     }
 
-    public function editOption($survey, $id)
+
+    public function destroyOption(Request $request, $survey, $id)
     {
         $survey = Survey::find($survey);
 
@@ -219,19 +248,18 @@ class SurveyController extends Controller
             abort(404);
         }
 
-        $page = Page::find(1);
-        $topSubpages = $page->topSubpages;
+        $option = SurveyOption::find($id);
 
-        return view('admin.surveys.options-form', compact('topSubpages', 'pages', 'survey'));
-    }
+        if (is_null($option)) {
+            abort(404);
+        }
 
-    public function updateOption(Request $request, $survey, $id)
-    {
+        if ($option->results()->count() > 0) {
+            return redirect()->back()->with(['status' => 'No puedes eliminar una opción que ya ha sido escogida!', 'status-result' => 'danger']);
+        }
 
-    }
+        $option->delete();
 
-    public function destroyOption(Request $request, $survey, $id)
-    {
-
+        return redirect()->back()->with(['status' => 'Opción eliminada correctamente!', 'status-result' => 'success']);
     }
 }
