@@ -14,18 +14,36 @@ Route::get('/{id?}', 'PageController@show')->where('id', '[0-9]*')->name('pages.
 
 Route::post('/survey/{id}', 'SurveyController@submit')->where('id', '[0-9]+')->name('surveys.submit');
 
-Route::get('/categories/{category}/documents/{id}', 'DocumentController@show')->where(['id' => '[0-9]+', 'category' => '[0-9]+'])->name('documents.show');
+Route::get('/categories/{category}/documents/{id}', 'DocumentController@show')->where(['id' => '[0-9]+', 'category' => '[0-9]+'])->name('categories.documents.show');
 
 
 // Admin Routes
-Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], function (){
+Route::group(['middleware' => 'auth', 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('users', 'UserController', [
-        'except' => 'show'
+        'only' => [
+            'index', 'create', 'store', 'edit', 'update', 'destroy'
+        ]
     ]);
-    Route::resource('pages', 'PageController', ['except' => 'show']);
-    Route::resource('categories', 'CategoryController');
-    Route::resource('categories.documents', 'DocumentController', ['except' => 'show']);
-    Route::resource('surveys', 'SurveyController');
+    Route::resource('pages', 'PageController', [
+        'only' => [
+            'index', 'create', 'store', 'edit', 'update', 'destroy'
+        ]
+    ]);
+    Route::resource('categories', 'CategoryController', [
+        'only' => [
+            'index', 'create', 'store', 'show', 'edit', 'update', 'destroy'
+        ]
+    ]);
+    Route::resource('categories.documents', 'DocumentController', [
+        'only' => [
+            'create', 'store', 'destroy'
+        ]
+    ]);
+    Route::resource('surveys', 'SurveyController', [
+        'only' => [
+            'index', 'create', 'store', 'show', 'edit', 'update', 'destroy'
+        ]
+    ]);
     // SurveyOptions
     Route::get('/surveys/{survey}/options/create', 'SurveyController@createOption')->where('survey', '[0-9]+')->name('surveys.options.create');
     Route::post('/surveys/{survey}/options', 'SurveyController@storeOption')->where('survey', '[0-9]+')->name('surveys.options.store');
@@ -47,8 +65,9 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('password/set/{token}', 'UserController@showPasswordForm')->name('password.setform');
 Route::post('password/set', 'UserController@setPassword')->name('password.set');
 
-
+/*
 // Catch all
-Route::get('{any}', function (){
+Route::get('{any}', function () {
     abort(404);
-})->where('any', '.*');
+})->where('any', '(?!public).*');
+*/
