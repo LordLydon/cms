@@ -7,6 +7,7 @@ use App\Survey;
 use App\SurveyOption;
 use App\SurveyResult;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class SurveyController extends Controller
@@ -187,7 +188,12 @@ class SurveyController extends Controller
             'option_id' => $request->optionsRadio,
         ]);
 
-        return back();
+        $page = Page::find(1);
+        $topSubpages = $page->topSubpages;
+        $options = $survey->options()->withCount('results');
+        $back = URL::previous();
+
+        return view('surveys.result', compact('survey', 'options', 'back', 'topSubpages'));
     }
 
     /**
