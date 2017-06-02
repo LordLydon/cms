@@ -34,10 +34,10 @@
                                 <div class="form-group">
                                     <label class="control-label">{{ $survey->question }}</label>
                                     <div class="option-group">
-                                        @foreach($survey->options as $option)
+                                        @foreach($survey->options as $key => $option)
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="optionsRadio" value="{{ $option->id }}" {{ $option->option == 1 ? 'checked' : '' }} required> {{ $option->value }}
+                                                    <input type="radio" name="optionsRadio" value="{{ $option->id }}" {{ $key == 0 ? 'checked' : '' }} required> {{ $option->value }}
                                                 </label>
                                             </div>
                                         @endforeach
