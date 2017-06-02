@@ -2,7 +2,7 @@
 
 @section('admin-content')
     <a href="{{ route('admin.pages.create') }}" class="btn btn-success pull-right mt-20"><i class="fa fa-plus"></i></a>
-    <h3>Paginas</h3>
+    <h3>Páginas</h3>
     <hr class="mt-0">
     @if (session('status'))
         <div class="alert alert-{{ session('status-result') }}">
@@ -19,6 +19,7 @@
             <th>Fecha de Creación</th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -33,6 +34,7 @@
                 <td>{{ $page->position }}</td>
                 <td>{{ $page->user->name }}</td>
                 <td>{{ $page->created_at->format('d/m/Y g:ia') }}</td>
+                <td class="text-center"><a href="{{ route('pages.show', ['page' => $page->id]) }}" class="btn btn-primary"><i class="fa fa-eye"></i></a></td>
                 <td class="text-center">
                     <a href="{{ route('admin.pages.edit', ['page' => $page->id]) }}" class="btn btn-warning"><i
                                 class="fa fa-pencil"></i></a>
