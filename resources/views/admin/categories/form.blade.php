@@ -15,7 +15,7 @@
         {{ isset($category) ? method_field('put') : '' }}
 
         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-            <label for="name" class="col-md-4 control-label">Nombre</label>
+            <label for="name" class="col-md-3 control-label">Nombre</label>
 
             <div class="col-md-6">
                 <input id="name" type="text" class="form-control" name="name"
@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
-            <label for="description" class="col-md-4 control-label">Descripción</label>
+            <label for="description" class="col-md-3 control-label">Descripción</label>
 
             <div class="col-md-6">
                 <input id="description" type="text" class="form-control" name="description"
@@ -45,7 +45,7 @@
         </div>
 
         <div class="form-group{{ $errors->has('page_id') ? ' has-error' : '' }}">
-            <label for="category_id" class="col-md-4 control-label">Habilitada en</label>
+            <label for="category_id" class="col-md-3 control-label">Habilitada en</label>
 
             <div class="col-md-6">
                 {{ Form::select('page_id', $pages, 1, ['placeholder' => 'Elige la página donde mostrarla', 'required' => 'required', 'style' => 'width:100%', 'id' => 'page_id']) }}
@@ -58,7 +58,7 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-6 col-md-offset-4">
+            <div class="col-md-6 col-md-offset-3">
                 <button type="submit" class="btn btn-primary">
                     {{ isset($category) ? 'Editar' : 'Crear' }} Categoría
                 </button>
