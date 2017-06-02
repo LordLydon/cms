@@ -63,6 +63,7 @@ class Fkeys extends Migration
             $table->engine = 'InnoDB';
 
             $table->dropForeign(['category_id']);
+            $table->dropForeign(['page_id']);
         });
 
         Schema::table('documents', function (Blueprint $table) {
@@ -80,7 +81,6 @@ class Fkeys extends Migration
         Schema::table('survey_results', function (Blueprint $table) {
             $table->engine = 'InnoDB';
 
-            $table->dropForeign(['user_id']);
             $table->dropForeign(['survey_id']);
         });
 
